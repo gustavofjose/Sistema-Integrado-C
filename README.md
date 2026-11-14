@@ -1,117 +1,192 @@
-# Sistema-Integrado-C
+# Sistema de Caixa Eletrônico em C
 
-## Visão Geral
+Projeto acadêmico desenvolvido em linguagem C, com o objetivo de simular o funcionamento de um caixa eletrônico, aplicando conceitos fundamentais de programação, lógica computacional, modularização, manipulação de arquivos, ponteiros, ordenação e recursividade.
 
-Sistema integrado desenvolvido em linguagem C que reúne três módulos funcionais em uma única aplicação com interface de menu interativo. O projeto demonstra a aplicação prática de conceitos fundamentais de programação estruturada, incluindo estruturas de controle, funções, manipulação de arquivos e processamento de dados.
+## Sobre o projeto
 
-## Objetivo
+O Sistema de Caixa Eletrônico é uma aplicação em terminal que permite realizar operações de saque, consultar o histórico de transações e verificar o valor total sacado.
 
-Desenvolver uma aplicação modular capaz de integrar diferentes soluções computacionais em um ambiente unificado, aplicando boas práticas de programação e organizando funcionalidades distintas de forma coesa e escalável.
+O sistema trabalha com um saldo inicial de **R$ 1.000,00** e utiliza um algoritmo de distribuição de cédulas para entregar o valor solicitado com a menor quantidade possível de notas, considerando as denominações disponíveis.
+
+Além das operações principais, o projeto foi desenvolvido para colocar em prática conteúdos estudados durante a graduação, demonstrando como diferentes conceitos da linguagem C podem ser aplicados em um sistema funcional.
+
+## Objetivos
+
+- Desenvolver um sistema de caixa eletrônico utilizando linguagem C.
+- Aplicar estruturas condicionais, repetição e funções.
+- Trabalhar com ponteiros e passagem de parâmetros por referência.
+- Implementar validações para garantir a segurança das operações.
+- Utilizar arquivos para armazenar o histórico de saques.
+- Aplicar o algoritmo Bubble Sort para organizar os registros.
+- Utilizar recursividade para calcular o total de saques realizados.
 
 ## Funcionalidades
 
-### 3.1. Módulo Bancário
+### 1. Realizar saque
 
-Simulação de operações de saque com validações completas:
+Permite que o usuário informe o valor que deseja retirar da conta.
 
-- Cadastro e autenticação de senha
-- Validação de valores (positivos e múltiplos de cinco)
-- Verificação de saldo disponível
-- Cálculo automático de cédulas necessárias
-- Atualização de saldo após transação
+Antes de concluir a operação, o sistema verifica se:
 
-### 3.2. Módulo de Criptografia
+- O valor informado é maior que zero.
+- O valor é múltiplo de R$ 5,00.
+- O saldo disponível é suficiente para realizar o saque.
 
-Codificação e decodificação de palavras utilizando múltiplos métodos:
+Se todas as condições forem atendidas, o sistema calcula a distribuição das cédulas, registra a operação e atualiza o saldo disponível.
 
-- Cifra de César (deslocamento de 3 posições)
-- Progressão Aritmética (PA)
-- Progressão Geométrica (PG)
-- Sequência de Fibonacci
-- Sequência de números primos
-- Comparação entre métodos de codificação
-- Registro de operações em arquivos de texto
+### 2. Distribuição de cédulas
 
-### 3.3. Módulo de Processamento de Imagens
+O sistema utiliza uma estratégia de distribuição que prioriza as maiores denominações disponíveis, buscando entregar o valor solicitado com a menor quantidade de cédulas.
 
-Análise de matrizes de imagem 16 × 16 pixels:
+As notas utilizadas são:
 
-- Leitura e análise de pixels
-- Construção de histograma
-- Geração de máscara binária
-- Cálculo de área ocupada
-- Identificação de caixa delimitadora (*Bounding Box*)
-- Cálculo de centroide
-- Cálculo de taxa de ocupação
+| Cédula | Valor |
+|---|---:|
+| R$ 100 | R$ 100,00 |
+| R$ 50 | R$ 50,00 |
+| R$ 20 | R$ 20,00 |
+| R$ 10 | R$ 10,00 |
+| R$ 5 | R$ 5,00 |
 
-## Tecnologias Utilizadas
+**Exemplo de saque:**
 
-| Tecnologia | Aplicação |
+Para um saque de R$ 285,00, o sistema realiza a seguinte distribuição:
+
+- 2 cédulas de R$ 100,00.
+- 1 cédula de R$ 50,00.
+- 1 cédula de R$ 20,00.
+- 1 cédula de R$ 10,00.
+- 1 cédula de R$ 5,00.
+
+Total: 6 cédulas.
+
+### 3. Histórico de saques
+
+As operações aprovadas são armazenadas no arquivo `historico_saques.txt`.
+
+Essa funcionalidade utiliza manipulação de arquivos para registrar os valores sacados e permitir que o histórico seja recuperado mesmo depois que o programa for encerrado.
+
+O sistema também permite consultar os registros armazenados.
+
+### 4. Ordenação com Bubble Sort
+
+O histórico de saques pode ser organizado utilizando o algoritmo Bubble Sort.
+
+O algoritmo compara os valores registrados e realiza trocas entre eles até obter a organização desejada.
+
+Essa implementação permite aplicar conceitos de ordenação e compreender o funcionamento de um algoritmo clássico.
+
+### 5. Consulta do total sacado
+
+O sistema possui uma funcionalidade que calcula o valor acumulado de todos os saques registrados.
+
+Para realizar esse cálculo, é utilizada a técnica de recursividade, na qual uma função chama a si mesma até atingir uma condição de parada.
+
+## Como o sistema funciona
+
+O funcionamento segue uma sequência de etapas:
+
+1. O programa é iniciado com saldo de R$ 1.000,00.
+2. O sistema apresenta um menu de opções.
+3. O usuário escolhe a operação desejada.
+4. Caso escolha realizar um saque, informa o valor.
+5. O programa valida as informações fornecidas.
+6. Se o saque for aprovado, calcula as cédulas necessárias.
+7. O valor é registrado no histórico e descontado do saldo.
+8. O usuário pode consultar o histórico ou o total sacado.
+9. Ao escolher sair, o programa é encerrado.
+
+## Tecnologias e conceitos utilizados
+
+| Tecnologia ou conceito | Aplicação no projeto |
 |---|---|
 | Linguagem C | Desenvolvimento da aplicação |
-| GCC | Compilação do código-fonte |
-| Visual Studio Code | Edição e organização do código |
-| GitHub | Versionamento e disponibilização |
+| `stdio.h` | Entrada e saída de dados |
+| Funções | Organização e divisão das responsabilidades |
+| Estruturas condicionais | Validação das operações |
+| Laços de repetição | Processamento e navegação pelo menu |
+| Vetores | Armazenamento da quantidade de cédulas |
+| Ponteiros | Atualização do saldo por referência |
+| Manipulação de arquivos | Persistência do histórico de saques |
+| Bubble Sort | Ordenação dos registros |
+| Recursividade | Cálculo do total sacado |
 
-## Estrutura do Projeto
+## Estrutura do projeto
 
 ```text
-Sistema-Integrado-C/
+Sistema-Caixa-Eletronico/
 │
-├── Sistema-Integrado.c
-├── README.md
-├── LICENSE
-└── .gitignore
+├── src/
+│   └── main.c
+│
+├── docs/
+│   ├── pseudocodigo.md
+│   └── testes.md
+│
+├── .gitignore
+└── README.md
 ```
 
-**Arquivos gerados durante a execução:**
+### Descrição dos arquivos
 
-- `senha.dat` — Armazenamento de credenciais
-- `resultado_criptografia.txt` — Resultados das operações de criptografia
-- `log_criptografia.txt` — Registro de operações realizadas
+- `src/main.c`: contém o código-fonte principal do sistema.
+- `docs/pseudocodigo.md`: apresenta a lógica do funcionamento do programa em pseudocódigo.
+- `docs/testes.md`: documenta os testes realizados e os resultados esperados.
+- `.gitignore`: define os arquivos que não devem ser enviados ao repositório.
+- `README.md`: apresenta a documentação geral do projeto.
 
-## Como Executar
+## Como executar o projeto
 
 ### Pré-requisitos
 
-- GCC instalado e configurado
-- Terminal ou ambiente de desenvolvimento compatível com C
+Para executar o sistema, é necessário ter um compilador C instalado, como o GCC.
 
-### Compilação
+### 1. Clonar o repositório
 
 ```bash
-gcc Sistema-Integrado.c -o Sistema-Integrado.exe
+git clone https://github.com/gustavofjose/Sistema-Caixa-Eletronico.git
 ```
 
-### Execução (Windows)
+### 2. Acessar a pasta
 
-```powershell
-.\Sistema-Integrado.exe
+```bash
+cd Sistema-Caixa-Eletronico
 ```
 
-## Organização do Sistema
+### 3. Compilar o programa
 
-Ao iniciar a aplicação, o usuário tem acesso ao menu principal:
+```bash
+gcc src/main.c -o caixa_eletronico
+```
 
-| Opção | Funcionalidade |
-|---|---|
-| 1 | Operações bancárias |
-| 2 | Criptografia |
-| 3 | Processamento de imagens |
-| 0 | Encerrar o programa |
+### 4. Executar
 
-Cada opção direciona o usuário ao módulo correspondente, permitindo utilização independente das funcionalidades.
+No Windows:
 
-## Considerações Finais
+```bash
+caixa_eletronico.exe
+```
 
-O desenvolvimento deste sistema proporcionou a aplicação prática de conceitos da programação estruturada, demonstrando como funções e estruturas de controle podem organizar uma aplicação com múltiplas funcionalidades. O projeto também abordou tópicos como sequências matemáticas, manipulação de arquivos, validação de dados e operações sobre matrizes.
+No Linux ou macOS:
 
-**Observação:** Os métodos de criptografia implementados possuem finalidade exclusivamente didática e não devem ser utilizados para proteger informações reais. A Cifra de César e as sequências matemáticas empregadas não oferecem segurança criptográfica adequada.
+```bash
+./caixa_eletronico
+```
 
-## Licença
+## Observações importantes
 
-Este projeto está disponibilizado sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para conhecer os termos de utilização, modificação e distribuição.
+- O saldo inicial é de R$ 1.000,00 e é reiniciado sempre que o programa é executado novamente.
+- O histórico de saques permanece salvo no arquivo `historico_saques.txt`.
+- O arquivo de histórico é criado automaticamente quando ocorre o primeiro saque aprovado.
+- A ordenação é aplicada aos registros durante a consulta, sem alterar a ordem original dos dados armazenados no arquivo.
+
+## Aprendizados
+
+O desenvolvimento deste projeto permitiu aplicar, na prática, conceitos importantes da programação em C, principalmente na organização do código, validação de dados, utilização de ponteiros e persistência de informações.
+
+Também possibilitou compreender melhor o funcionamento de algoritmos de ordenação e recursividade, relacionando os conteúdos estudados em aula com a construção de uma aplicação funcional.
+
 
 ---
 
-**Projeto acadêmico desenvolvido para fins educacionais, como aplicação prática dos conceitos de programação em linguagem C.**
+Projeto desenvolvido para fins acadêmicos e de aprendizado.
