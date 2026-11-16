@@ -69,7 +69,7 @@ Essa funcionalidade utiliza manipulação de arquivos para registrar os valores 
 
 O sistema também permite consultar os registros armazenados.
 
-### 4. Ordenação com Bubble Sort
+### 4. Ordenação com Bubble Sort e Quick Sort
 
 O histórico de saques pode ser organizado utilizando o algoritmo Bubble Sort.
 
@@ -86,6 +86,10 @@ Cada saque carregado do arquivo é guardado em uma `struct Saque`, com o número
 O sistema possui uma funcionalidade que calcula o valor acumulado de todos os saques registrados.
 
 Para realizar esse cálculo, é utilizada a técnica de recursividade, na qual uma função chama a si mesma até atingir uma condição de parada.
+
+### 6. Consulta de saldo
+
+A primeira opção do menu mostra o saldo disponível na sessão atual.
 
 ## Como o sistema funciona
 
@@ -120,25 +124,23 @@ O funcionamento segue uma sequência de etapas:
 ## Estrutura do projeto
 
 ```text
-Sistema-Caixa-Eletronico/
+Sistema-Integrado-C/
 │
-├── src/
-│   └── main.c
+├── Sistema-Integrado.c
 │
 ├── docs/
 │   ├── pseudocodigo.md
-│   └── testes.md
+│   └── relatorio_tecnico.md
 │
-├── .gitignore
+├── LICENSE
 └── README.md
 ```
 
 ### Descrição dos arquivos
 
-- `src/main.c`: contém o código-fonte principal do sistema.
+- `Sistema-Integrado.c`: contém o código-fonte do sistema, com comentários explicando cada função.
 - `docs/pseudocodigo.md`: apresenta a lógica do funcionamento do programa em pseudocódigo.
-- `docs/testes.md`: documenta os testes realizados e os resultados esperados.
-- `.gitignore`: define os arquivos que não devem ser enviados ao repositório.
+- `docs/relatorio_tecnico.md`: relatório do trabalho, incluindo os testes com 50, 95, 123 e 1005 e as saídas obtidas.
 - `README.md`: apresenta a documentação geral do projeto.
 
 ## Como executar o projeto
@@ -150,19 +152,19 @@ Para executar o sistema, é necessário ter um compilador C instalado, como o GC
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/gustavofjose/Sistema-Caixa-Eletronico.git
+git clone https://github.com/gustavofjose/Sistema-Integrado-C.git
 ```
 
 ### 2. Acessar a pasta
 
 ```bash
-cd Sistema-Caixa-Eletronico
+cd Sistema-Integrado-C
 ```
 
 ### 3. Compilar o programa
 
 ```bash
-gcc src/main.c -o caixa_eletronico
+gcc Sistema-Integrado.c -o caixa_eletronico
 ```
 
 ### 4. Executar

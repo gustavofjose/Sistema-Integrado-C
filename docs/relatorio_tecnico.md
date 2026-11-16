@@ -48,6 +48,7 @@ O código foi separado em funções para deixar cada parte do programa responsá
 - `carregar_historico`: recupera os valores que já foram registrados;
 - `ordenar_saques`: organiza os valores do histórico com Bubble Sort;
 - `quick_sort` e `particionar`: organizam os valores do histórico com Quick Sort;
+- `trocar`: troca dois saques de lugar recebendo ponteiros para as structs;
 - `exibir_saque`: mostra um saque recebendo um ponteiro para a struct;
 - `somar_saques_recursivo`: calcula o total dos saques usando recursividade.
 
@@ -73,7 +74,9 @@ Também foi implementado o Quick Sort, disponível na opção 5 do menu. Ele esc
 
 Também foi utilizada a recursividade no cálculo do total sacado. Nesse caso, a função soma um valor do histórico e chama a si mesma para processar os próximos valores. A condição de parada acontece quando todos os registros foram considerados.
 
-Essas duas partes foram incluídas para praticar os conteúdos de algoritmos trabalhados durante as aulas.
+Uma diferença entre os dois algoritmos aparece quando há saques com o mesmo valor: o Bubble Sort é estável e mantém esses saques na ordem em que foram feitos, enquanto o Quick Sort não é estável e pode mostrá-los em outra ordem (por exemplo, "Saque n. 3" antes de "Saque n. 1", ambos de R$ 50). Os valores ficam ordenados do mesmo jeito; só muda a ordem entre os empates.
+
+Essas partes foram incluídas para praticar os conteúdos de algoritmos trabalhados durante as aulas.
 
 ## 8. Armazenamento do histórico
 
@@ -91,6 +94,60 @@ Foram considerados os seguintes valores para verificar as validações do sistem
 | R$ 95,00 | Saque permitido | Valor positivo, múltiplo de 5 e dentro do saldo |
 | R$ 123,00 | Saque recusado | Não é múltiplo de 5 |
 | R$ 1.005,00 | Saque recusado | Valor maior que o saldo inicial |
+
+Cada teste foi feito em uma execução nova do programa (saldo inicial de R$ 1.000,00), escolhendo a opção 2 do menu.
+
+### Teste 1 — R$ 50 (válido)
+
+```text
+Saldo disponivel nesta sessao: R$ 1000
+Digite o valor do saque: 50
+
+Notas entregues:
+1 nota(s) de R$ 50
+
+Saque realizado com sucesso.
+Saldo restante nesta sessao: R$ 950
+```
+
+Análise: o valor é múltiplo de 5 e cabe no saldo. Uma única nota de 50 resolve o saque.
+
+### Teste 2 — R$ 95 (válido)
+
+```text
+Saldo disponivel nesta sessao: R$ 1000
+Digite o valor do saque: 95
+
+Notas entregues:
+1 nota(s) de R$ 50
+2 nota(s) de R$ 20
+1 nota(s) de R$ 5
+
+Saque realizado com sucesso.
+Saldo restante nesta sessao: R$ 905
+```
+
+Análise: 95 / 100 = 0 (resto 95); 95 / 50 = 1 (resto 45); 45 / 20 = 2 (resto 5); 5 / 10 = 0 (resto 5); 5 / 5 = 1 (resto 0). As notas com quantidade zero (100 e 10) não são exibidas.
+
+### Teste 3 — R$ 123 (inválido)
+
+```text
+Saldo disponivel nesta sessao: R$ 1000
+Digite o valor do saque: 123
+Erro: o valor deve ser multiplo de 5.
+```
+
+Análise: 123 % 5 = 3, então não é possível formar o valor com as cédulas disponíveis. O saque é recusado, o saldo não muda e nada é gravado no histórico.
+
+### Teste 4 — R$ 1005 (inválido)
+
+```text
+Saldo disponivel nesta sessao: R$ 1000
+Digite o valor do saque: 1005
+Erro: saldo insuficiente.
+```
+
+Análise: 1005 é múltiplo de 5, mas é maior que o saldo de R$ 1.000,00. O saque é recusado, o saldo não muda e nada é gravado no histórico.
 
 Também é importante verificar se o histórico é salvo corretamente e se as opções de consulta apresentam os valores registrados.
 

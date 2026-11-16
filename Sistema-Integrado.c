@@ -27,6 +27,7 @@ void atualizar_saldo(int *saldo, int saque);
 void exibir_erro(int status);
 int salvar_saque(int saque);
 int carregar_historico(struct Saque saques[], int limite);
+void trocar(struct Saque *a, struct Saque *b);
 void ordenar_saques(struct Saque saques[], int quantidade);
 int particionar(struct Saque saques[], int inicio, int fim);
 void quick_sort(struct Saque saques[], int inicio, int fim);
@@ -224,9 +225,15 @@ int carregar_historico(struct Saque saques[], int limite) {
     return quantidade;
 }
 
+/* Troca dois saques de lugar usando ponteiros. */
+void trocar(struct Saque *a, struct Saque *b) {
+    struct Saque temporario = *a;
+    *a = *b;
+    *b = temporario;
+}
+
 /* Ordena os saques do menor para o maior usando Bubble Sort. */
 void ordenar_saques(struct Saque saques[], int quantidade) {
-    struct Saque temporario;
     int trocou;
 
     for (int i = 0; i < quantidade - 1; i++) {
@@ -235,9 +242,7 @@ void ordenar_saques(struct Saque saques[], int quantidade) {
         for (int j = 0; j < quantidade - 1 - i; j++) {
 
             if (saques[j].valor > saques[j + 1].valor) {
-                temporario = saques[j];
-                saques[j] = saques[j + 1];
-                saques[j + 1] = temporario;
+                trocar(&saques[j], &saques[j + 1]);
 
                 trocou = 1;
             }
@@ -253,20 +258,15 @@ void ordenar_saques(struct Saque saques[], int quantidade) {
 int particionar(struct Saque saques[], int inicio, int fim) {
     int pivo = saques[fim].valor;
     int i = inicio - 1;
-    struct Saque temporario;
 
     for (int j = inicio; j < fim; j++) {
         if (saques[j].valor <= pivo) {
             i++;
-            temporario = saques[i];
-            saques[i] = saques[j];
-            saques[j] = temporario;
+            trocar(&saques[i], &saques[j]);
         }
     }
 
-    temporario = saques[i + 1];
-    saques[i + 1] = saques[fim];
-    saques[fim] = temporario;
+    trocar(&saques[i + 1], &saques[fim]);
 
     return i + 1;
 }
