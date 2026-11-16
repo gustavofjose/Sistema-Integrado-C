@@ -15,7 +15,7 @@ Além disso, foram adicionadas opções para consultar o histórico de saques e 
 
 ## 3. Funcionamento do sistema
 
-Quando o programa é iniciado, o saldo começa em R$ 1.000,00 e um menu é apresentado ao usuário. Pelo menu, é possível escolher entre realizar um saque, consultar o histórico, consultar o total sacado ou encerrar o programa.
+Quando o programa é iniciado, o saldo começa em R$ 1.000,00 e um menu é apresentado ao usuário. Pelo menu, é possível escolher entre ver o saldo, realizar um saque, consultar o histórico, consultar o total sacado, consultar o histórico ordenado com Quick Sort ou encerrar o programa.
 
 Na opção de saque, o usuário informa o valor desejado. O sistema verifica se o valor é positivo, se é múltiplo de cinco e se não ultrapassa o saldo disponível. Caso alguma dessas condições não seja atendida, uma mensagem informa que o saque não pode ser realizado.
 
@@ -46,7 +46,9 @@ O código foi separado em funções para deixar cada parte do programa responsá
 - `atualizar_saldo`: realiza a atualização do saldo;
 - `salvar_saque`: registra um saque aprovado no arquivo;
 - `carregar_historico`: recupera os valores que já foram registrados;
-- `ordenar_saques`: organiza os valores do histórico;
+- `ordenar_saques`: organiza os valores do histórico com Bubble Sort;
+- `quick_sort` e `particionar`: organizam os valores do histórico com Quick Sort;
+- `exibir_saque`: mostra um saque recebendo um ponteiro para a struct;
 - `somar_saques_recursivo`: calcula o total dos saques usando recursividade.
 
 Essa divisão ajuda a entender o código e facilita a manutenção, pois cada função possui uma responsabilidade principal.
@@ -59,12 +61,15 @@ Durante o desenvolvimento foram aplicados diferentes conteúdos estudados na dis
 - **Laços de repetição:** utilizados no menu e nos cálculos das cédulas.
 - **Vetores:** utilizados para guardar a quantidade de cada tipo de cédula e os valores do histórico.
 - **Funções:** utilizadas para separar as tarefas do programa.
-- **Ponteiros:** utilizados, por exemplo, para permitir a atualização do saldo por referência.
+- **Structs:** cada saque do histórico é guardado em uma `struct Saque`, com número e valor.
+- **Ponteiros:** utilizados para atualizar o saldo por referência e para acessar a struct com o operador `->`.
 - **Manipulação de arquivos:** utilizada para salvar e recuperar o histórico de saques.
 
 ## 7. Ordenação e recursividade
 
 Para organizar os valores apresentados na consulta do histórico, foi utilizado o algoritmo Bubble Sort. Ele compara os valores próximos e realiza trocas quando necessário, repetindo esse processo até que a lista esteja ordenada.
+
+Também foi implementado o Quick Sort, disponível na opção 5 do menu. Ele escolhe o último elemento como pivô, coloca os valores menores à esquerda e os maiores à direita e depois chama a si mesmo para ordenar cada lado. Enquanto o Bubble Sort tem complexidade O(n²), o Quick Sort tem, em média, O(n log n).
 
 Também foi utilizada a recursividade no cálculo do total sacado. Nesse caso, a função soma um valor do histórico e chama a si mesma para processar os próximos valores. A condição de parada acontece quando todos os registros foram considerados.
 
@@ -97,7 +102,7 @@ Como melhoria futura, seria possível salvar o saldo em arquivo e desenvolver ou
 
 ## 11. Conclusão
 
-A realização deste trabalho ajudou a colocar em prática os conteúdos estudados em linguagem C. Durante o desenvolvimento, foi possível trabalhar com funções, vetores, ponteiros e arquivos, além de aplicar Bubble Sort e recursividade.
+A realização deste trabalho ajudou a colocar em prática os conteúdos estudados em linguagem C. Durante o desenvolvimento, foi possível trabalhar com funções, vetores, ponteiros, structs e arquivos, além de aplicar Bubble Sort, Quick Sort e recursividade.
 
 Também foi importante pensar nas validações para evitar que o programa aceitasse valores incorretos. O resultado foi um sistema simples, mas que reúne diferentes conceitos da programação e permite entender melhor como eles podem ser utilizados em um projeto.
 

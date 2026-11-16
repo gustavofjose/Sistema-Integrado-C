@@ -17,7 +17,8 @@ Além das operações principais, o projeto foi desenvolvido para colocar em pr�
 - Trabalhar com ponteiros e passagem de parâmetros por referência.
 - Implementar validações para garantir a segurança das operações.
 - Utilizar arquivos para armazenar o histórico de saques.
-- Aplicar o algoritmo Bubble Sort para organizar os registros.
+- Aplicar os algoritmos Bubble Sort e Quick Sort para organizar os registros.
+- Representar cada saque do histórico com uma `struct`.
 - Utilizar recursividade para calcular o total de saques realizados.
 
 ## Funcionalidades
@@ -76,6 +77,10 @@ O algoritmo compara os valores registrados e realiza trocas entre eles até obte
 
 Essa implementação permite aplicar conceitos de ordenação e compreender o funcionamento de um algoritmo clássico.
 
+O menu também oferece a ordenação com Quick Sort, que usa recursividade e a estratégia de dividir para conquistar: um pivô separa os valores menores dos maiores e cada parte é ordenada novamente.
+
+Cada saque carregado do arquivo é guardado em uma `struct Saque`, com o número da operação e o valor. Na exibição, a struct é acessada por ponteiro com o operador `->`.
+
 ### 5. Consulta do total sacado
 
 O sistema possui uma funcionalidade que calcula o valor acumulado de todos os saques registrados.
@@ -93,7 +98,7 @@ O funcionamento segue uma sequência de etapas:
 5. O programa valida as informações fornecidas.
 6. Se o saque for aprovado, calcula as cédulas necessárias.
 7. O valor é registrado no histórico e descontado do saldo.
-8. O usuário pode consultar o histórico ou o total sacado.
+8. O usuário pode consultar o saldo, o histórico ou o total sacado.
 9. Ao escolher sair, o programa é encerrado.
 
 ## Tecnologias e conceitos utilizados
@@ -108,7 +113,8 @@ O funcionamento segue uma sequência de etapas:
 | Vetores | Armazenamento da quantidade de cédulas |
 | Ponteiros | Atualização do saldo por referência |
 | Manipulação de arquivos | Persistência do histórico de saques |
-| Bubble Sort | Ordenação dos registros |
+| Structs | Representação de cada saque do histórico |
+| Bubble Sort e Quick Sort | Ordenação dos registros |
 | Recursividade | Cálculo do total sacado |
 
 ## Estrutura do projeto

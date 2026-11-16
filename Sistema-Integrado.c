@@ -10,6 +10,12 @@
 #define VALOR_NAO_MULTIPLO 2
 #define SALDO_INSUFICIENTE 3
 
+/* Representa um saque registrado no historico. */
+struct Saque {
+    int numero; /* ordem em que o saque foi feito */
+    int valor;
+};
+
 /* Prototipos das funcoes */
 int ler_inteiro(const char mensagem[], int *valor);
 int validar_saque(int saque, int saldo);
@@ -20,16 +26,19 @@ void exibir_notas(const int notas[], const int quantidades[],
 void atualizar_saldo(int *saldo, int saque);
 void exibir_erro(int status);
 int salvar_saque(int saque);
-int carregar_historico(int saques[], int limite);
-void ordenar_saques(int saques[], int quantidade);
-int somar_saques_recursivo(const int saques[], int quantidade);
+int carregar_historico(struct Saque saques[], int limite);
+void ordenar_saques(struct Saque saques[], int quantidade);
+int particionar(struct Saque saques[], int inicio, int fim);
+void quick_sort(struct Saque saques[], int inicio, int fim);
+int somar_saques_recursivo(const struct Saque saques[], int quantidade);
+void exibir_saque(const struct Saque *saque);
 void realizar_saque(int *saldo, const int notas[], int total_notas);
-void consultar_historico(void);
+void consultar_historico(int usar_quick_sort);
 void consultar_total_saques(void);
 void exibir_menu(void);
 
 int main(void) {
-    int opcao;
+    int opcao = -1;
     int saldo = SALDO_INICIAL;
     const int notas[TOTAL_NOTAS] = {100, 50, 20, 10, 5};
 
@@ -52,15 +61,23 @@ int main(void) {
 
         switch (opcao) {
             case 1:
-                realizar_saque(&saldo, notas, TOTAL_NOTAS);
+                printf("\nSaldo disponivel: R$ %d\n", saldo);
                 break;
 
             case 2:
-                consultar_historico();
+                realizar_saque(&saldo, notas, TOTAL_NOTAS);
                 break;
 
             case 3:
+                consultar_historico(0);
+                break;
+
+            case 4:
                 consultar_total_saques();
+                break;
+
+            case 5:
+                consultar_historico(1);
                 break;
 
             case 0:
@@ -184,19 +201,21 @@ int salvar_saque(int saque) {
     return sucesso;
 }
 
-/* Le os saques registrados e armazena os valores em um vetor. */
-int carregar_historico(int saques[], int limite) {
+/* Le os saques registrados e armazena em um vetor de structs. */
+int carregar_historico(struct Saque saques[], int limite) {
     FILE *arquivo = fopen(ARQUIVO_HISTORICO, "r");
     int quantidade = 0;
+    int valor;
 
     if (arquivo == NULL) {
         return 0;
     }
 
-    while (quantidade < limite &&
-           fscanf(arquivo, "%d", &saques[quantidade]) == 1) {
+    while (quantidade < limite && fscanf(arquivo, "%d", &valor) == 1) {
 
-        if (saques[quantidade] > 0) {
+        if (valor > 0) {
+            saques[quantidade].numero = quantidade + 1;
+            saques[quantidade].valor = valor;
             quantidade++;
         }
     }
@@ -206,8 +225,8 @@ int carregar_historico(int saques[], int limite) {
 }
 
 /* Ordena os saques do menor para o maior usando Bubble Sort. */
-void ordenar_saques(int saques[], int quantidade) {
-    int temporario;
+void ordenar_saques(struct Saque saques[], int quantidade) {
+    struct Saque temporario;
     int trocou;
 
     for (int i = 0; i < quantidade - 1; i++) {
@@ -215,7 +234,7 @@ void ordenar_saques(int saques[], int quantidade) {
 
         for (int j = 0; j < quantidade - 1 - i; j++) {
 
-            if (saques[j] > saques[j + 1]) {
+            if (saques[j].valor > saques[j + 1].valor) {
                 temporario = saques[j];
                 saques[j] = saques[j + 1];
                 saques[j + 1] = temporario;
@@ -230,8 +249,44 @@ void ordenar_saques(int saques[], int quantidade) {
     }
 }
 
+/* Separa o vetor: menores que o pivo a esquerda, maiores a direita. */
+int particionar(struct Saque saques[], int inicio, int fim) {
+    int pivo = saques[fim].valor;
+    int i = inicio - 1;
+    struct Saque temporario;
+
+    for (int j = inicio; j < fim; j++) {
+        if (saques[j].valor <= pivo) {
+            i++;
+            temporario = saques[i];
+            saques[i] = saques[j];
+            saques[j] = temporario;
+        }
+    }
+
+    temporario = saques[i + 1];
+    saques[i + 1] = saques[fim];
+    saques[fim] = temporario;
+
+    return i + 1;
+}
+
+/* Ordena os saques do menor para o maior usando Quick Sort. */
+void quick_sort(struct Saque saques[], int inicio, int fim) {
+
+    /* Caso base: trecho com 0 ou 1 elemento ja esta ordenado. */
+    if (inicio >= fim) {
+        return;
+    }
+
+    int posicao_pivo = particionar(saques, inicio, fim);
+
+    quick_sort(saques, inicio, posicao_pivo - 1);
+    quick_sort(saques, posicao_pivo + 1, fim);
+}
+
 /* Soma os saques utilizando recursividade. */
-int somar_saques_recursivo(const int saques[], int quantidade) {
+int somar_saques_recursivo(const struct Saque saques[], int quantidade) {
 
     /* Caso base: nao existem mais valores para somar. */
     if (quantidade <= 0) {
@@ -239,7 +294,7 @@ int somar_saques_recursivo(const int saques[], int quantidade) {
     }
 
     /* Soma o ultimo valor e chama a propria funcao novamente. */
-    return saques[quantidade - 1] +
+    return saques[quantidade - 1].valor +
            somar_saques_recursivo(saques, quantidade - 1);
 }
 
@@ -287,9 +342,14 @@ void realizar_saque(int *saldo, const int notas[], int total_notas) {
     printf("Saldo restante nesta sessao: R$ %d\n", *saldo);
 }
 
+/* Mostra um saque acessando a struct por ponteiro. */
+void exibir_saque(const struct Saque *saque) {
+    printf("Saque n. %d: R$ %d\n", saque->numero, saque->valor);
+}
+
 /* Consulta e apresenta o historico ordenado. */
-void consultar_historico(void) {
-    int saques[MAX_HISTORICO];
+void consultar_historico(int usar_quick_sort) {
+    struct Saque saques[MAX_HISTORICO];
     int quantidade = carregar_historico(saques, MAX_HISTORICO);
 
     if (quantidade == 0) {
@@ -297,12 +357,17 @@ void consultar_historico(void) {
         return;
     }
 
-    ordenar_saques(saques, quantidade);
-
-    printf("\n=== HISTORICO DE SAQUES (ORDEM CRESCENTE) ===\n");
+    if (usar_quick_sort) {
+        quick_sort(saques, 0, quantidade - 1);
+        printf("\n=== HISTORICO ORDENADO (QUICK SORT) ===\n");
+    }
+    else {
+        ordenar_saques(saques, quantidade);
+        printf("\n=== HISTORICO ORDENADO (BUBBLE SORT) ===\n");
+    }
 
     for (int i = 0; i < quantidade; i++) {
-        printf("Saque %d: R$ %d\n", i + 1, saques[i]);
+        exibir_saque(&saques[i]);
     }
 
     if (quantidade == MAX_HISTORICO) {
@@ -313,7 +378,7 @@ void consultar_historico(void) {
 
 /* Consulta a quantidade e o total dos saques registrados. */
 void consultar_total_saques(void) {
-    int saques[MAX_HISTORICO];
+    struct Saque saques[MAX_HISTORICO];
     int quantidade = carregar_historico(saques, MAX_HISTORICO);
 
     if (quantidade == 0) {
@@ -337,8 +402,10 @@ void consultar_total_saques(void) {
 /* Apresenta as opcoes disponiveis no sistema. */
 void exibir_menu(void) {
     printf("----- MENU -----\n");
-    printf("1 - Realizar saque\n");
-    printf("2 - Consultar historico de saques (ordenado)\n");
-    printf("3 - Consultar total sacado (recursividade)\n");
+    printf("1 - Ver saldo\n");
+    printf("2 - Realizar saque\n");
+    printf("3 - Consultar historico ordenado (Bubble Sort)\n");
+    printf("4 - Consultar total sacado (recursividade)\n");
+    printf("5 - Consultar historico ordenado (Quick Sort)\n");
     printf("0 - Sair\n");
 }
